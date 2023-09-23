@@ -1,12 +1,10 @@
-# Usage
+## Usage
 
-#### git clone https://github.com/Lavitr/Matrix_task.git
-#### cd Matrix_task
+git clone https://github.com/Lavitr/Matrix_task.git
 
-#### `npm install`
+cd Matrix_task
 
+`npm install`
 
-In the project directory, you can run:
-
-#### `npm start`
+`npm start`
 
