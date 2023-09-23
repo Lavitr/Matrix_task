@@ -1,26 +1,33 @@
 import React, { useState, useEffect, useRef } from "react";
 import { reactData } from "../mockData";
 import FoundItems from "../components/FoundItems";
+import ResultStat from "../components/ResultStat";
 import { getSerchItems, generateList } from "../helpers";
 
 const LOCAL_STORAGE_KEY = "serchInput";
+const titles = reactData().map((item) => item.title);
 
 const Input = () => {
   const [value, setValue] = useState("");
-  const [titles, setTitles] = useState([]);
   const [searchTitles, setSearchTitles] = useState([]);
   const [hasFocused, setHasFocused] = useState(true);
   const [showItem, setShowItem] = useState(false);
   const [displayItems, setDiplayItems] = useState([]);
+  const [startTime, setStartTime] = useState(0);
+  const [removing, setRemoving] = useState(false);
   const ref = useRef();
   const [savedItems, setSavedItems] = useState(
     JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || []
   );
-  const [removing, setRemoving] = useState(false);
 
   useEffect(() => {
     ref.current.focus();
-    setTitles(reactData().map((item) => item.title));
+    document.addEventListener("click", (e) => {
+      setRemoving(false);
+    });
+    return document.removeEventListener("click", (e) => {
+      setRemoving(false);
+    });
   }, []);
 
   const setNewStorage = (arr) => {
@@ -38,6 +45,7 @@ const Input = () => {
   };
 
   const onSelect = (e, title) => {
+    setStartTime(performance.now());
     setRemoving(false);
     const serchItems = getSerchItems(reactData(), title);
     setDiplayItems(serchItems);
@@ -55,7 +63,11 @@ const Input = () => {
     setSearchTitles([...new Set(searchTitles)]);
   };
 
+  const showDropDown = () =>
+    searchTitles.length > 0 && (hasFocused || removing) && value;
+
   const handleKeyDown = (event) => {
+    setStartTime(performance.now());
     if (event.key === "Enter") {
       setHasFocused(false);
       ref.current.blur();
@@ -77,17 +89,25 @@ const Input = () => {
       <h3>SearchX</h3>
       <input
         ref={ref}
-        className={(hasFocused || removing) && value ? "active" : ""}
+        className={
+          (hasFocused || removing) && value && !!searchTitles.length
+            ? "active"
+            : ""
+        }
         value={value}
         onChange={onChange}
         onKeyDown={handleKeyDown}
         onBlur={onBlur}
         onFocus={onFocus}
       />
-      {searchTitles.length > 0 && (hasFocused || removing) && value && (
+      {showDropDown() ? (
         <ul>
           {generateList(searchTitles, savedItems, { onSelect, onRemove })}
         </ul>
+      ) : (
+        value && (
+          <ResultStat count={displayItems.length} startTime={startTime} />
+        )
       )}
       {showItem && displayItems.length > 0 && (
         <FoundItems items={displayItems} />

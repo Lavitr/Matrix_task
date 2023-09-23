@@ -12,10 +12,10 @@ export const generateSearchItemsArray = (muchSerchArray, savedItems) => {
 };
 
 export const getSerchItems = (data, value) =>
-  data.filter(
-    (item) => item.title.toLocaleLowerCase() === value.toLocaleLowerCase()
+  data.filter((item) =>
+    item.title.toLocaleLowerCase().startsWith(value.toLocaleLowerCase())
   );
-
+  
 export const generateList = (
   searchTitles,
   savedItems,
@@ -26,7 +26,7 @@ export const generateList = (
     ind < len ? (
       <li
         key={title + ind}
-        className="in-memory"
+        className="memory-item"
         onMouseDown={(e) => onSelect(e, title)}
       >
         {title}

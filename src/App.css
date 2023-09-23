@@ -31,13 +31,11 @@ a {
   text-decoration: none;
   font-size: 20px;
   text-transform: capitalize;
-}
-
-p {
+  color: #1c37ce;
 }
 
 ul {
-  width: 99%;
+  width: -webkit-fill-available;
   margin-top: 0;
   border: 2px solid #d5d3d3;
   border-top: unset;
@@ -55,13 +53,25 @@ li:hover {
   background-color: #e7e4e3;
 }
 
-.in-memory {
+.memory-item {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   font-weight: 700;
+  color: #562873;
 }
 
 .search-item {
   margin-top: 20px;
+}
+
+.result-stats {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: Google Sans, arial, sans-serif;
+  padding-top: 0px;
+  padding-bottom: 0;
+  padding-right: 8px;
+  color: #70757a;
 }
